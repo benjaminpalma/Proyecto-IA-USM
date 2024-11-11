@@ -1,14 +1,16 @@
 # Nombre del ejecutable
-EXEC = ejecutable.exe
+EXEC = ejecutable
 
 # Archivos fuente
-SOURCES = arbol.cpp generador.cpp utilidades.cpp main.cpp
+SOURCES = build/*
 
-# Compilador
-CC = g++
-
-# Opciones de compilación
-CFLAGS = -Wall -std=c++11
+ifeq ($(shell which g++),)
+  CC = gcc
+  CFLAGS = -std=c++11 -xc++ -lstdc++ -shared-libgcc
+else
+  CC = g++
+  CFLAGS = -std=c++11
+endif
 
 # Reglas de compilación
 
