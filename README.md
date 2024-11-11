@@ -10,13 +10,13 @@ Para compilar y ejecutar este programa, es necesario tener instalado el compilad
 
 | Distribución | Comando para instalar `g++` |
 |:------------|:---------------------------|
-| **Ubuntu/Debian** | ```bash\nsudo apt-get update\nsudo apt-get install g++``` |
-| **Arch Linux** | ```bash\nsudo pacman -S gcc``` |
-| **Red Hat/CentOS** | ```bash\nsudo yum install gcc-c++``` |
-| **Fedora** | ```bash\nsudo dnf install gcc-c++``` |
-| **OpenSUSE** | ```bash\nsudo zypper install gcc-c++``` |
-| **MacOS (con Homebrew)** | ```bash\nbrew install gcc``` |
-| **FreeBSD** | ```bash\nsudo pkg install gcc``` |
+| **Ubuntu/Debian** | ```sudo apt-get update; sudo apt-get install g++``` |
+| **Arch Linux** | ```sudo pacman -S gcc``` |
+| **Red Hat/CentOS** | ```sudo yum install gcc-c++``` |
+| **Fedora** | ```sudo dnf install gcc-c++``` |
+| **OpenSUSE** | ```sudo zypper install gcc-c++``` |
+| **MacOS (con Homebrew)** | ```brew install gcc``` |
+| **FreeBSD** | ```sudo pkg install gcc``` |
 
 Se puede obtener el ejecutable simplemente corriendo el comando
 ```bach
