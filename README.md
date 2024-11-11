@@ -5,11 +5,11 @@ El programa crea representaciones de una mazmorra 2D mediante arboles, explciado
 Ha sido implementado en C++ y está diseñado específicamente para ejecutarse en entornos **UNIX**.
 
 ### Falta por implementar:
-[ ] Evolucion (avanzado pero no funcional para mostrar)
-[ ] Seleccion de la evolucion
-[ ] Generacion de barreras y llaves a la solucion con algoritmos A*
-[ ] Comprobar solucion
-[ ] Generar una visualizacion*
++ [ ] Evolucion (avanzado pero no funcional para mostrar)
++ [ ] Seleccion de la evolucion
++ [ ] Generacion de barreras y llaves a la solucion con algoritmos A*
++ [ ] Comprobar solucion
++ [ ] Generar una visualizacion*
 
 
 ## Dependencias
