@@ -13,29 +13,29 @@ public:
     int value;
     vector<Node*> child;
 
-    Node(int value) : valor(value) {}
+    Node(int value) : value(value) {}
 };
 
 class Tree{
 public:
     Node* root;
-    int lastNodeValue;
+    int lastNodeValue, nodeCount;
     float lastCoef;
     unsigned int seed;
     set<Node*> incompleteNodes;
 
-    Tree(unsigned int seed = static_cast<unsigned int>(time(0))) : seed(seed), lastNodeValue(1), lastCoef(0.0) {
+    Tree(unsigned int seed = static_cast<unsigned int>(time(0))) : seed(seed), lastNodeValue(1),  nodeCount(1), lastCoef(0.0){
         root = new Node(lastNodeValue); // Nodo raíz con valor 1
         incompleteNodes.insert(root); // La raíz es el primer nodo incompleto
         srand(seed);
     }
 
     ~Tree() {
-        recuriveDeleteNode(root);
+        recursiveDeleteNode(this->root);
     }
 
     int nodeNum(){
-        return lastNodeValue;
+        return nodeCount;
     }
 
     void recursiveCoefCount(Node* node, float& coef, int& totalNodes){
@@ -88,6 +88,7 @@ public:
 
         // Crear el nuevo nodo con el siguiente valor secuencial
         lastNodeValue++;
+        nodeCount++;
         Node* newNode = new Node(lastNodeValue);
         selectedNode->child.push_back(newNode); // Agregar el nuevo nodo como hijo
 
@@ -109,6 +110,7 @@ public:
         }
 
         this->lastNodeValue++;
+        this->nodeCount;
 
         // Crear el nuevo nodo con el siguiente valor secuencial
         Node* newNode = new Node(this->lastNodeValue);  // Incrementar el contador para que el nodo tenga un valor único
@@ -153,7 +155,7 @@ public:
         for(Node* child : node->child){
             // Para evitar loops y referencias incorrectas, aseguramos que cada conexión solo se añada una vez
             pair<int, int> conection = make_pair(node->value, child->value);
-            if(conections.find(conection) == conection.end()){
+            if(conections.find(conection) == conections.end()){
                 dotFile << "  " << node->value << " -> " << child->value << ";\n";
                 conections.insert(conection);  // Guardar la conexión para evitar duplicados
             }
@@ -163,10 +165,10 @@ public:
         }
     }
 
-    void recuriveDeleteNode(Node* node) {
+    void recursiveDeleteNode(Node* node) {
         if (!node) return;
         for (Node* child : node->child) {
-            recuriveDeleteNode(child);
+            recursiveDeleteNode(child);
         }
         delete node;
     }
