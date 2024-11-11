@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <cstdlib> // Para system()
+#include <cstdlib>
 
 using namespace std;
 

@@ -2,77 +2,80 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <random>
+#include <cmath>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "arbol.cpp"
 #include "utilidades.cpp"
 
-using namespace std;
-
 class GenForest {
 public:
-    vector<Tree*> forest;
+    std::vector<Tree*> forest;
     unsigned int seed;
+    float stdDev;
 
-    GenForest(int n, int x, float c) {
-        seed = static_cast<unsigned int>(time(0));
-        srand(seed);
-        cout << "Semilla utilizada: " << seed << endl;
+    // Constructor de GenForest con parámetros ajustables
+    GenForest(int n, int x, float c, unsigned int seed = static_cast<unsigned int>(time(0)), int stdDev=0.2)
+        : seed(seed), stdDev(stdDev)  // Inicialización de semilla y desviación estándar
+    {
+        srand(this->seed);
+        std::cout << "Semilla utilizada: " << this->seed << std::endl;
 
         // Crear las carpetas necesarias
         createDir();
 
         for (int i = 0; i < n; i++) {
-            Tree* tree = genRandomTree(x, c, seed);
+            Tree* tree = genRandomTree(x, this->seed, this->stdDev);
             forest.push_back(tree);
+
+            std::cout << "Árbol " << i + 1 << " - Total de nodos: "
+                      << forest[i]->nodeNum()
+                      << ", Coeficiente: " << forest[i]->Coef() << std::endl;
+
+            // Genera archivo .dot en la carpeta poblacion/.dot
+            std::string dotFileName = "poblacion/.dot/arbol" + std::to_string(i + 1) + ".dot";
+            forest[i]->dotGen(dotFileName);
+
+            // Convierte archivo .dot a .png en la carpeta poblacion/
+            std::string pngFileName = "poblacion/arbol" + std::to_string(i + 1) + ".png";
+            Utilidades::convertirDotAPng(dotFileName, pngFileName);
         }
     }
 
     // Función para crear las carpetas necesarias
     void createDir() {
-        // Crear la carpeta "poblacion/.dot" si no existe
         struct stat info;
+
+        // Crear carpeta "poblacion" si no existe
         if (stat("poblacion", &info) != 0) {
-            mkdir("poblacion", 0777);  // Crear carpeta "poblacion"
-        }
-        if (stat("poblacion/.dot", &info) != 0) {
-            mkdir("poblacion/.dot", 0777);  // Crear carpeta "poblacion/.dot"
+            if (mkdir("poblacion", 0777) == -1) {
+                std::cerr << "Error al crear la carpeta 'poblacion'" << std::endl;
+            }
         }
 
-	return 0;
+        // Crear carpeta "poblacion/.dot" si no existe
+        if (stat("poblacion/.dot", &info) != 0) {
+            if (mkdir("poblacion/.dot", 0777) == -1) {
+                std::cerr << "Error al crear la carpeta 'poblacion/.dot'" << std::endl;
+            }
+        }
     }
 
-    Tree* genRandomTree(int roomCount, float coef) {
-        Tree* tree = new Tree();
-	for (i = 0; i<roomCount; i++){}
-            generarNodosAleatorios(arbol->raiz, habitacionesRestantes, coeficienteLineal, arbol->raiz);
+    // Función para generar un árbol aleatorio con un número de nodos basado en una desviación estándar
+    Tree* genRandomTree(int roomCount, unsigned int seed, double standardDev) {
+        // Generar el número de nodos usando una distribución normal
+        std::mt19937 gen(seed);
+        std::normal_distribution<> dist(roomCount, standardDev);
+        int nodesCount = std::round(dist(gen));
+
+        // Generar el árbol con la semilla dada
+        Tree* tree = new Tree(seed);
+        for (int i = 0; i < nodesCount; i++) {
+            tree->randomNodeGen();
+        }
         return tree;
     }
-
-    // Función para generar nodos aleatorios con un valor secuencial.
-void generarNodosAleatorios(Nodo* nodo, int& habitacionesRestantes, float coeficienteLineal, Nodo* padre, int& valorNodo) {
-    if (habitacionesRestantes <= 0 || !nodo) return;
-
-    // Generamos la cantidad de hijos a crear, con un valor de coeficiente aproximado
-    int hijosACrear = static_cast<int>(coeficienteLineal + (rand() % 2));  
-    hijosACrear = min(hijosACrear, habitacionesRestantes);
-
-    for (int i = 0; i < hijosACrear && habitacionesRestantes > 0; i++) {
-        int valorAleatorio = valorNodo++;  // Incrementamos el valor del nodo
-
-        Nodo* hijoNuevo = new Nodo(valorAleatorio);
-        if (hijoNuevo == nullptr) {
-            cerr << "Error al crear un nodo hijo. Memoria insuficiente." << endl;
-            return;
-        }
-
-        nodo->hijos.push_back(hijoNuevo);  // Asignamos el hijo al nodo actual
-        habitacionesRestantes--;
-
-        // Recursivamente generar nodos para este hijo
-        generarNodosAleatorios(hijoNuevo, habitacionesRestantes, coeficienteLineal, hijoNuevo, valorNodo);
-    }
-  }
 };
 
 int main() {
@@ -80,21 +83,6 @@ int main() {
     int habitaciones = 10;
     float coeficiente = 1.5f;
 
-    GeneradorArboles generador(numArboles, habitaciones, coeficiente);
-
-    for (int i = 0; i < numArboles; i++) {
-        cout << "Árbol " << i + 1 << " - Total de nodos: "
-             << generador.arboles[i]->contarNodos(generador.arboles[i]->raiz)
-             << ", Coeficiente: " << generador.arboles[i]->obtenerCoeficiente() << endl;
-
-        // Genera archivo .dot en la carpeta poblacion/.dot
-        string nombreArchivoDot = "poblacion/.dot/arbol_" + to_string(i + 1) + ".dot";
-        generador.arboles[i]->generarDot(nombreArchivoDot);
-
-        // Convierte archivo .dot a .png en la carpeta poblacion/
-        string nombreArchivoPng = "poblacion/arbol_" + to_string(i + 1) + ".png";
-        Utilidades::convertirDotAPng(nombreArchivoDot, nombreArchivoPng);
-    }
-
+    GenForest genForest(numArboles, habitaciones, coeficiente);
     return 0;
 }
