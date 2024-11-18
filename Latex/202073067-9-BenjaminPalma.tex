@@ -1,0 +1,170 @@
+\documentclass[letter, 10pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[dvips]{graphicx}
+\usepackage{url}
+\usepackage[top=3cm,bottom=3cm,left=3.5cm,right=3.5cm,footskip=1.5cm,headheight=1.5cm,headsep=.5cm,textheight=3cm]{geometry}
+
+
+\begin{document}
+\title{Inteligencia Artificial \\ \begin{Large}Estado del Arte: Generaci\'on de Mazmorras\end{Large}}
+\author{Benjam\'in Palma}
+\date{\today}
+\maketitle
+
+
+%--------------------No borrar esta secci\'on--------------------------------%
+\section*{Evaluaci\'on}
+
+\begin{tabular}{ll}
+Resumen (5\%): & \underline{\hspace{2cm}} \\
+Introducci\'on (5\%): & \underline{\hspace{2cm}} \\
+Definici\'on del Problema (10\%): & \underline{\hspace{2cm}} \\
+Estado del Arte (35\%): & \underline{\hspace{2cm}} \\
+Modelo Matem\'atico (20\%): & \underline{\hspace{2cm}}\\
+Conclusiones (20\%): & \underline{\hspace{2cm}}\\
+Bibliograf\'ia (5\%): & \underline{\hspace{2cm}}\\
+ & \\
+\textbf{Nota Final (100\%)}:  & \underline{\hspace{2cm}}
+\end{tabular}
+%---------------------------------------------------------------------------%
+\vspace{2cm}
+
+
+\begin{abstract}
+% Los juegos han estado con la humanidad desde sus inicios, como herramientas de socializaci\'on, entretenci\'on y mas importante como catalizador de creatividad y tecnolog\'ia. Hoy en d\'ia podemos ver como la industria de los juegos y las tecnol\'ogicas avanzan a pasos agigantados, notandolo con la creciente inversi\'on y ganancias en juegos, tecnol\'ogicamente en avances dentro de la computaci\'on cu\'antica, rob\'otica, IA y algoritmos. Algoritmos como la generaci\'on procedural de mazmorras que es una t\'ecnica fundamental en el dise\~no de videojuegos, permite la creaci\'on de entornos din\'amicos, personalizables y \'unicos en cada partida, al reducir la carga de dise\~no manual, estos algoritmos permiten a los desarrolladores centrarse en otros aspectos del juego, como la narrativa y la mec\'anica, fomentando la innovaci\'on de nuevo conocimiento y tecnolog\'ias. 
+
+Los juegos han acompa\~nado a la humanidad desde sus inicios como herramientas de socializaci\'on, entretenimiento y, m\'as importante a\'un, como catalizadores de creatividad y tecnolog\'ia. Podemos observar c\'omo la industria de los juegos y la tecnolog\'ia avanzan a pasos agigantados, reflejado en la creciente inversi\'on y ganancias en este sector, as\'i como en los avances en \'areas como la computaci\'on cu\'antica, la rob\'otica, la inteligencia artificial y el desarrollo de algoritmos. T\'ecnicas como la generaci\'on procedural de mazmorras, fundamentales en el dise\~no de videojuegos, permiten la creaci\'on de entornos din\'amicos, personalizables y \'unicos en cada partida. Al reducir la carga de dise\~no manual, estos algoritmos permiten a los desarrolladores centrarse en otros aspectos del juego, como la narrativa y la mec\'anica, fomentando as\'i la innovaci\'on de nuevos conocimientos y tecnolog\'ias.
+\end{abstract}
+
+\section{Introducci\'on}
+%Una explicaci\'on breve del contenido del informe, es decir, detalla: Prop\'osito, Estructura del Documento, Descripci\'on (muy breve) del Problema y Motivaci\'on.
+
+La generaci\'on procedural se remonta a los a\~nos 70, con la llegada de los libros de {\it Dungeons \& Dragons}, cuyo objetivo era recrear una aventura \'epica mediante una narrativa interactiva. En este contexto, la imaginaci\'on humana permite crear escenarios pr\'acticamente infinitos y con interacciones complejas. Esta caracter\'istica se hizo tan popular que fue adoptada en los videojuegos mediante el g\'enero ``{\it Roguelike}'', en honor al juego ``Rogue'' \cite{roguerise}, el cual usa esta t\'ecnica en la creaci\'on de niveles tipo mazmorras, generando niveles \'unicos en cada partida. Hoy en d\'ia, los algoritmos de generaci\'on procedural buscan ofrecer esta misma libertad que caracteriza a {\it Dungeons \& Dragons}, con altos grados de personalizaci\'on, exploraci\'on, interacci\'on y unicidad.
+
+Siguiendo la l\'inea de investigaci\'on en generaci\'on procedural, definida por Togelius et al. \cite{togelius2014procedural} como la creaci\'on de contenido por software junto a humanos o de manera aut\'onoma, este proyecto se enfoca en explorar las estrategias \'optimas para generar mazmorras, bas\'andose en los modelos de contenido procedural categorizados por Breno et al. \cite{viana2019PDG} La dificultad radica en generar un niveles coherente con barreras y llaves (las llaves abren las barreras), esto genera combinaciones no solucionables para el jugador, por lo que es una restriccion que se debe tomar en cuetna.
+
+En las secciones posteriores, se introduce el trasfondo y la definici\'on del problema; luego, en el Estado del Arte, se exploran las t\'ecnicas actuales y los modelos matem\'aticos en el contexto de la generaci\'on procedural; finalmente, se presentan las conclusiones basadas en el an\'alisis de estrategias y su impacto en la generaci\'on de mazmorras.
+
+\section{Definici\'on del Problema}
+% Explicaci\'on del problema que se va a estudiar, en qu\'e consiste, cu\'ales son sus variables , restricciones y objetivo(s) de manera general (en palabras, no una formulaci\'on matem\'atica). Debe entenderse claramente el problema y qu\'e busca resolver.
+% Explicar si existen problemas relacionados.
+% Destacar, si existen, las variantes m\'as conocidas.\\
+% Redactar en tercera persona, sin faltas de ortograf\'ia y referenciar correctamente sus fuentes mediante el comando \verb+\cite{ }+. Por ejemplo, para hacer referencia al art\'iculo de algoritmos h\'ibridos para problemas de satisfacci\'on 
+% de restricciones~\cite{Prosser93Hybrid}.
+
+De acuerdo con Togelius et. al \cite{togelius2014procedural} la generaci\'on procedural se refiere a alg\'un software que pueden crear contenido en conjunto con humanos, dise\~nadores o auton\'omicamente. Van Der Linden \cite{van2013procedural} describe a los niveles de mazmorras (dungeon levels) como laberintos que integran de manera interrelacionada recompensas, desaf\'ios y acertijos, los cuales el jugador debe superar para progresar en el juego.
+
+El problema a tratar en este estudio involucra la creaci\'on de niveles de mazmorras con varios componentes clave: barreras $B$, llaves $L$, un m\'inimo de llaves requeridas $L_R$, habitaciones $H$ y el coeficiente lineal $C_L$, estos par\'ametros son dados por el usuario. Las restricciones impuestas en el dise\~no de la mazmorra exigen que todas las habitaciones $H$ est\'en conectadas de manera accesible desde la habitaci\'on inicial y que cada habitaci\'on tenga un m\'aximo de cuatro conexiones adyacentes (arriba, abajo, izquierda y derecha). En estas habitaciones pueden colocarse puertas bloqueadas $B$ que requieran llaves $L$ para abrirse; cada llave abre una puerta espec\'ifica, aunque algunas puertas pueden requerir varias llaves, y ciertas llaves pueden estar duplicadas. Para asegurar la resolubilidad del nivel, se define un m\'inimo de llaves requeridas $L_R$, y se dise\~na el algoritmo de modo que los valores de $B$, $L$, y $L_R$ aseguren accesibilidad sin bloqueos insalvables.
+
+Para medir la linealidad o ramificaci'on de la mazmorra, se introduce el coeficiente lineal $C_L$ usado en \cite{Dumont2024}, el cual mide el n\'umero promedio de habitaciones adyacentes, sin contar la habitaci\'on por la cual uno entra influyendo en el grado de ramificaci'on y controlando la linealidad del dise\~no, con valores entre 1 y 3. Este coeficiente se calcula promediando los valores individuales de cada habitaci\'on, y, por simplicidad, no se consideran casos con bucles.
+
+El objetivo entonces es minimizar la diferencia entre los par\'ametros dados por el usuario sobre los valores de $H$, $B$, $L$, $L_R$ y $C_L$ los generados por el algoritmo, para que el dise\~no final de la mazmorra respete los par'ametros y criterios especificados en la mayor medida posible.
+
+\section{Estado del Arte}
+% La informaci\'on que describen en este punto se basa en los estudios realizados con antelaci\'on respecto al tema.
+% Lo m\'as importante que se ha hecho hasta ahora con relaci\'on al problema. Deber\'ia responder preguntas como las siguientes:
+% ?`cu\'ando surge?, ?`qu\'e m\'etodos se han usado para resolverlo?, ?`cu\'ales son los mejores algoritmos que se han creado hasta
+% la fecha?, ?`qu\'e representaciones han tenido los mejores resultados?, ?`cu\'al es la tendencia actual para resolver el problema?, tipos de movimientos, heur\'isticas, m\'etodos completos, tendencias, etc... Puede incluir gr\'aficos comparativos o explicativos.
+
+El dise\~no de entornos coherentes y visualmente atractivos es fundamental en la generaci\'on de mazmorras. Breno et al. \cite{viana2019PDG} que proponen una taxonom\'ia para la generaci\'on procedural de mazmorras, clasific\'andolas en cuatro categor\'ias: tipo de mazmorra, elementos y mec\'anicas de juego, generaci\'on de contenido procedimental y estrategias de soluci\'on. Seg\'un la taxonom\'ia los autores concluyen que creaci\'on de mazmorras condicionadas por barreras y llaves es un \'area subestudiada, mostrando 4 de 26 documentos revisados entre 2011 y 2019 en CM Digital Library, IEEE Xplore y Scopus abordaron este tema espec\'ifico. En cuanto a las estrategias de soluci\'on, los algoritmos gen\'eticos y constructivos son los m\'as comunes para la generaci\'on de mazmorras. Sin embargo, en el contexto espec\'ifico de problemas con barreras, no se ven estos m\'etodos, sino enfoques alternativos, como gram\'atica generativa, programaci\'on gen\'etica y programaci\'on de conjuntos de respuestas ({\it Answer Set Programming} ASP). Estudios recientes (2021-2024) \cite{Dumont2024,PEREIRA2021115009} han investigado algoritmos evolutivos, tambi\'en se aprecia un marco de trabajo de dos iteraciones en \cite{Dumont2024,10.1145/3337722.3341847}, donde se basan en generar primero la mazmorra y luego la l\'ogica de llaves y barreras. En el estado del arte actual (2023-2024), se han incorporado tecnolog\'ias como Modelos Largos de Lenguaje (LLM) para resolver problema, inspirados fuera de nuestro contexto en \cite{holygrail2.0} donde usan a los modelos como interfaces para transformar problemas de lenguaje natural en c\'odigo para solvers de satisfacci\'on y optimizaci\'on (ejemplo, MiniZinc). Y luego paper como \cite{word2world} donde usan a estos modelos como n\'ucleo para crear niveles con restricciones con marcos de trabajo iterativos, donde la generaci\'on, reparaci\'on y evaluaci\'on van convergiendo a una soluci\'on. 
+
+Considerando la experiencia previa en la aplicaci\'on de gram\'atica generativa en este contexto, se presenta una oportunidad prometedora para explorar el potencial de los Modelos Largos de Lenguaje (LLM) en la resoluci\'on de nuestro problema. Nuestro enfoque innovador consiste en dise\~nar un modelo representable en texto, que pueda ser procesado mediante un gran modelo del lenguaje. Esta aproximaci\'on permite aprovechar las capacidades de comprensi\'on y generaci\'on de lenguaje natural de los LLM. En este punto realizaremos dos pasos como mencionan en \cite{Dumont2024,10.1145/3337722.3341847}, primero generaremos la mazmorra y validaremos su correcta generaci\'on, en el segundo paso ubicaremos las llaves y barreras. Posteriormente, evaluaremos la efectividad de la soluci\'on generado mediante algoritmos especializados basados en AStar que verifiquen el cumplimiento de las restricciones y requisitos espec\'ificos de nuestro problema. Este enfoque integrado combina la potencia de los LLM con la precisi\'on de los algoritmos de evaluaci\'on, lo que nos permite abordar el problema desde una perspectiva m\'as hol\'istica y eficiente. 
+
+Nuestro m\'etodo se puede describir en las siguientes etapas:
+\begin{enumerate}
+    \item Dise\~no del modelo representable en texto.
+    \item Generaci\'on de una soluci\'on de esquema de mazmorra mediante un gran modelo del lenguaje (LLM).
+    \item Evaluaci\'on de la soluci\'on mediante algoritmos de verificaci\'on de restricciones.
+    \item Instanciar llaves y barreras dentro de la Dungeon
+    \item Validar correcta instanciacion
+    \item Soluci\'on, sino iterar hasta 5 veces desde 4 en adelante con nueva informaci\'on (heur\'isticas), sino volver a 2 y cambiar el esquema de la mazmorra.
+\end{enumerate}
+\section{Modelo Matem\'atico}
+% Uno o m\'as modelos matem\'aticos para el problema, idealmente indicando el espacio de b\'usqueda para cada uno. Cada modelo debe estar correctamente referenciado, adem\'as no debe ser una imagen extraida. Tambi\'en deben explicarse en detalle cada una de las partes, mostrando claramente la funci\'on a maximizar/minimizar, variables y restricciones. Tanto las f\'ormulas como las explicaciones deben ser consistentes.
+\subsection*{Modelamiento como problema de restricciones y optimizaci\'on cl\'asico (COP)}
+
+\subsection*{Funci\'on Objetivo}
+La funci\'on objetivo busca minimizar la diferencia absoluta entre los valores ideales y los alcanzados de habitaciones, llaves, barreras, linealidad y llaves necesarias:
+\[
+f(x) = 2 (\Delta_{H}+\Delta_{L}+\Delta_{B}+\Delta_{C_L}) + \Delta_{L_R}
+\]
+donde:
+\begin{itemize}
+    \item $\Delta_H$ es la diferencia absoluta en el n\'umero de habitaciones pedidas ($\widehat{H}$) y instanciadas ($H$).
+    \item $\Delta_L$ es la diferencia en el n\'umero de llaves pedidas ($\widehat{L}$) y instanciadas ($L$).
+    \item $\Delta_B$ es la diferencia en el n\'umero de barreras pedidas ($\widehat{B}$) y instanciadas ($B$).
+    \item $\Delta_{C_L}$ es la diferencia en el coeficiente de linealidad pedidos ($\widehat{C_L}$) y instanciados ($C_L$).
+    \item $\Delta_{L_R}$ es la diferencia en el n\'umero de llaves necesarias pedidas ($\widehat{L_R}$) y instanciadas ($L_R$).
+\end{itemize}
+
+En un inicio las instancias y lo pedido ser\'an la misma, pero si no llegara a existir soluci\'on el algoritmo empezar\'ia a variar primero las llaves necesarias pedidas y luego lo dem\'as en orden de hacer el nivel soluci\'onale
+
+\subsubsection*{Variables}
+\begin{itemize}
+    \item $x_{ij}$: Binaria $x_{ij} \in \{0,1\}$, indica si existe una conexi\'on entre la habitaci\'on $i$ y la habitaci\'on $j$, donde $\{i \in \mathbb{N} \ |\ 0\leq i \leq H,\ H \in \mathbb{N}\}$ y $\{j \in \mathbb{N} \ |\ 0\leq j \leq H,\ H \in \mathbb{N} \land j \neq i\}$ .
+    
+    \item $k_b$: N\'umero de llaves requeridos para abrir la barrera $b \in \{b \in \mathbb{N} \ |\ 0\leq b \leq B,\ B \in \mathbb{N}\}$, $k_b \in \mathbb{N}$.
+    
+    \item $b_{l}$: Barreras n-\'ecima y su asignaci\'on a las llaves l-\'esima (uno a uno). $b_{l} \in \{b_{l} \in \mathbb{N} \ |\ 0\leq b_{l} \leq B,\ B \in \mathbb{N}\}$ y $l \in \{l \in \mathbb{N} \ |\ 0\leq l \leq L,\ L \in \mathbb{N}\}$
+    
+    \item $C_L$: Coeficiente de linealidad (medido en funci\'on de la linealidad de la secuencia de conexi\'on entre habitaciones). $C_L \in [1,3]$
+    
+    \item $L_R$: N\'umero de llaves necesarias para completar el nivel. $L_R \in \{L_R \in \mathbb{N} \ |\ B\leq L_R \leq L,\ B,L\in \mathbb{N}\}$
+\end{itemize}
+
+
+
+\subsubsection*{Restricciones}
+\begin{enumerate}
+    \item \textbf{Conectividad entre habitaciones}:
+    \begin{itemize}
+        \item \textbf{Conexi\'on m\'inima}: Todas las habitaciones deben estar conectadas al menos a otra habitaci\'on:
+        \[
+        \sum_{j} x_{ij} \geq 1, \quad \forall i
+        \]
+        \item \textbf{Conexi\'on m\'axima}: Cada habitaci\'on puede tener un m\'aximo de 4 conexiones (arriba, derecha, abajo, izquierda):
+        \[
+        \sum_{j} x_{ij} \leq 4, \quad \forall i
+        \]
+    \end{itemize}
+    
+    \item \textbf{Asignaci\'on de llaves y barreras}:
+    \begin{itemize}
+        \item Cada llave tiene una barrera asignada, pero una barrera puede requerir varias llaves:
+        \[
+        k_b \geq 1, \quad \forall b
+        \]
+    \end{itemize}
+    
+    \item \textbf{Compleci\'on del nivel}:
+    \begin{itemize}
+        \item El n\'umero de llaves asignadas debe ser suficiente para pasar todas las barreras y llegar al final del nivel:
+        \[
+        \sum_{b} k_b \leq l_N
+        \]
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{Soluci\'on orientado a un algoritmo de 2 pasos evolutivo}
+
+Nuestra propuesta actual consiste en representar la mazmorra mediante una estructura de \'arbol como en \cite{Dumont2024}, en la cual cada nodo puede tener un m\'aximo de tres hijos que representan, respectivamente, los lados oeste, sur y este del nodo actual (es decir, habitaciones adyacentes). El nodo padre, en cambio, se sit\'ua siempre al norte del nodo actual, permitiendo as\'i que la orientaci\'on de las habitaciones var\'ie y no todas tengan la misma disposici\'on espacial. Esta organizaci\'on facilita que la mazmorra crezca homog\'eneamente en todas las direcciones, brindando una flexibilidad estructural que hace m\'as sencilla la construcci\'on de mutaciones, tales como la adici\'on o eliminaci\'on de hojas en el \'arbol, lo que implica agregar o quitar habitaciones. Esta flexibilidad afecta directamente el coeficiente lineal de la mazmorra, elemento clave en el dise\~no.
+
+El proceso de cruzamiento consiste en seleccionar un sub \'arbol de cada progenitor e intercambiarlo, generando as\'i dos nuevos individuos o hijos. Este mecanismo tiene como objetivo principal producir una diversidad de mazmorras que se aproximen lo m\'as posible tanto a la cantidad deseada de habitaciones como al coeficiente lineal ideal, optimizando la estructura para que cumpla con los par\'ametros establecidos.
+
+Una vez que se ha generado un candidato de mazmorra adecuado, se procede a la distribuci\'on aleatoria de barreras y llaves dentro de las habitaciones. Con esta disposici\'on inicial, se recorre la mazmorra desde la ra\'iz del \'arbol, y mediante un algoritmo A* (A star), se intenta localizar las llaves necesarias para abrir cada barrera en el camino. Si se logra desbloquear todas las barreras, la salida de la mazmorra se sit\'ua justo detr\'as de la \'ultima barrera, asegurando que el recorrido sea viable y cumpla con el desaf\'io planteado.
+
+
+\section{Conclusiones}
+% Conclusiones RELEVANTES del estudio realizado. Deber\'ia responder a las preguntas: ?`todas las t\'ecnicas resuelven el mismo problema o hay algunas diferencias?, ?`En qu\'e se parecen o difieren las t\'ecnicas en el contexto del problema?, ?`qu\'e limitaciones tienen?, ?`qu\'e t\'ecnicas o estrategias son las m\'as prometedoras?, ?`existe trabajo futuro por realizar?, ?`qu\'e ideas usted propone como lineamientos para continuar con investigaciones futuras?
+
+La generaci\'on procedural en videojuegos no solo se limita a crear laberintos o entornos laber\'inticos, sino que permite a los desarrolladores enriquecer los mundos virtuales a trav\'es de sistemas que reaccionan y se adaptan en tiempo real, aumentando la rejugabilidad y proporcionando una experiencia de juego m\'as inmersiva y desafiante, podemos ver como esto esta tomando lugar \cite{7uses}. A lo largo de los a\~nos, el desarrollo de algoritmos avanzados y t\'ecnicas de inteligencia artificial ha permitido perfeccionar la generaci\'on de mazmorras, haciendo que se conviertan en una herramienta cada vez m\'as poderosa y vers\'atil, incluyendo el lenguaje humano dentro de la formulaci\'on de problemas, dejando espacio a su extrapolaci\'on a otras \'areas no solamente los videojuegos.
+
+\section{Bibliograf\'ia}
+% Indicando toda la informaci\'on necesaria de acuerdo al tipo de documento revisado. Todas las referencias deben ser citadas en el documento.
+\bibliographystyle{plain}
+\bibliography{Referencias}
+
+\end{document} 

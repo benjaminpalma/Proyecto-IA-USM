@@ -35,7 +35,7 @@ public:
             this->forest.push_back(tree);
 
             std::cout << "Árbol " << i + 1 << " - Total de nodos: "
-                      << this->forest[i]->nodeNum()
+                      << this->forest[i]->nodeCount
                       << ", Coeficiente: " << this->forest[i]->Coef() << std::endl;
 
             // Genera archivo .dot en la carpeta poblacion/.dot
