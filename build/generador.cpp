@@ -11,6 +11,11 @@
 
 class Forest {
 public:
+
+    ////////////////////////////////////////////
+    // Initialisation of the Forest structure //
+    ////////////////////////////////////////////
+
     std::vector<Tree*> forest;
     unsigned int seed;
     float stdDev;
@@ -86,90 +91,59 @@ public:
         return tree;
     }
 
-    // void mutateRemoveRoom(Tree* tree) {
-    //     if (tree->root == nullptr) return;
+    ///////////////////////////////////////////
+    //////////////// Crossover ////////////////
+    ///////////////////////////////////////////
 
-    //     // Seleccionar un nodo aleatorio en el árbol
-    //     Node* current = selectRandomNode(tree);
+    // Crossover two trees by exchanging subtrees
+    void crossover(Tree* tree1, Tree* tree2) {
+        if (!tree1->root || !tree2->root) return;
 
-    //     // Desciende hasta encontrar una hoja
-    //     Node* leaf = findLeaf(current);
+        // Choose random nodes from both trees
+        Node* subtree1 = getRandomNode(tree1->root);
+        Node* subtree2 = getRandomNode(tree2->root);
 
-    //     if (leaf) {
-    //         // Eliminar la hoja encontrada del árbol
-    //         removeNode(tree, leaf);
-    //         cout << "Habitación (nodo) eliminada durante la mutación." << endl;
-    //     }
-    // }
+        // Swap the subtrees
+        swapSubtrees(tree1, subtree1, tree2, subtree2);
+    }
 
-    // // Función de mutación para agregar una habitación
-    // void mutateAddRoom(Tree* tree) {
-    //     if (tree->root == nullptr) return;
+    // Get a random node from the tree
+    Node* getRandomNode(Node* root) {
+        vector<Node*> nodes;
+        collectNodes(root, nodes);
+        return nodes[rand() % nodes.size()];
+    }
 
-    //     // Seleccionar un nodo aleatorio
-    //     Node* current = selectRandomNode(tree);
+    // Collect all nodes in the tree
+    void collectNodes(Node* node, vector<Node*>& nodes) {
+        if (!node) return;
+        nodes.push_back(node);
+        for (Node* child : node->children) {
+            collectNodes(child, nodes);
+        }
+    }
 
-    //     // Buscar una posición disponible para un nuevo hijo
-    //     Node* available = findAvailablePosition(current);
+    // Swap subtrees between two trees
+    void swapSubtrees(Tree* tree1, Node* subtree1, Tree* tree2, Node* subtree2) {
+        if (!subtree1 || !subtree2) return;
 
-    //     if (available) {
-    //         tree->lastNodeValue++;
-    //         Node* newRoom = new Node();
-    //         available->child.push_back(newRoom);
-    //         cout << "Habitación (nodo) añadida durante la mutación." << endl;
-    //     }
-    // }
+        // Swap the subtrees
+        Node* temp = subtree1;
+        subtree1 = subtree2;
+        subtree2 = temp;
 
-    // // Función para cruzar dos árboles
-    // void crossover(Tree* parent1, Tree* parent2) {
-    //     Node* crossoverNode1 = selectRandomNode(parent1);
-    //     Node* crossoverNode2 = selectRandomNode(parent2);
+        // Update the parent-child relationships
+        updateParentChild(tree1, subtree1);
+        updateParentChild(tree2, subtree2);
+    }
 
-    //     if (crossoverNode1 && crossoverNode2) {
-    //         swapSubtrees(parent1, parent2, crossoverNode1, crossoverNode2);
-    //         cout << "Cruce realizado entre los árboles." << endl;
-    //     }
-    // }
+    // Update the parent-child relationships after swapping subtrees
+    void updateParentChild(Tree* tree, Node* subtree) {
+        if (!subtree) return;
 
-    // private:
-    // Node* selectRandomNode(Tree* tree) {
-    //     // Selecciona un nodo aleatorio en el árbol
-    //     // Aquí podría implementarse un recorrido y selección aleatoria
-    //     // ...
-    // }
-
-    // Node* findLeaf(Node* node) {
-    //     // Encuentra una hoja descendiendo desde el nodo dado
-    //     while (!node->child.empty()) {
-    //         node = node->child[rand() % node->child.size()];
-    //     }
-    //     return node;
-    // }
-
-    // Node* findAvailablePosition(Node* node) {
-    //     // Encuentra un nodo con espacio disponible para agregar un hijo
-    //     while (node->child.size() == 3) {
-    //         if (node->child.empty()) return nullptr;
-    //         node = node->child[rand() % node->child.size()];
-    //     }
-    //     return node;
-    // }
-
-    // void removeNode(Tree* tree, Node* node) {
-    //     // Remueve el nodo del árbol
-    //     for (auto it = tree->incompleteNodes.begin(); it != tree->incompleteNodes.end(); ++it) {
-    //         if (*it == node) {
-    //             tree->incompleteNodes.erase(it);
-    //             break;
-    //         }
-    //     }
-    //     delete node;
-    // }
-
-    // void swapSubtrees(Tree* tree1, Tree* tree2, Node* node1, Node* node2) {
-    //     // Realiza el intercambio de subárboles entre node1 y node2
-    //     Node* temp = node1;
-    //     node1 = node2;
-    //     node2 = temp;
-    // }
+        // Update the parent-child relationships recursively
+        for (Node* child : subtree->children) {
+            updateParentChild(tree, child);
+        }
+    }
 };

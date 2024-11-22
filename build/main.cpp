@@ -1,15 +1,16 @@
 #include <iostream>
 #include "generador.cpp"
+#include "barriers&keys.cpp"
 
 using namespace std;
 
-int main(){
+int main() {
     int treeCount, roomCount, barrierCount, keysCount, neededKeysCount;
     unsigned int seed;
     float linealC, stdDev;
     char answer;
 
-    while(true){
+    while (true) {
         // Solicitar el número de árboles en el bosque
         cout << "Ingrese el número de árboles en el bosque: ";
         cin >> treeCount;
@@ -42,7 +43,8 @@ int main(){
         cout << "Quiere configurar parametros extras? semilla y desviacion standar de iniciacion [y/n]";
         cin >> answer;
 
-        if(answer == 'y' || answer == 'Y'){
+        Forest* generador;
+        if (answer == 'y' || answer == 'Y') {
             // Solicitar el número de llaves
             cout << "Ingrese una semilla (para la aleatoriedad): ";
             cin >> seed;
@@ -52,13 +54,31 @@ int main(){
             cin >> stdDev;
 
             // Crear la instancia de GenForest con los valores ingresados
-            Forest generador(treeCount, roomCount, seed, stdDev);
-        }else{
-            Forest generador(treeCount, roomCount);
-
+            generador = new Forest(treeCount, roomCount, seed, stdDev);
+        } else {
+            generador = new Forest(treeCount, roomCount);
         }
 
-        cout << "Bosque generado con éxito." << endl;
+        // Insert barriers and keys
+        BarrierKeyManager manager;
+        for (Tree* tree : generador->forest) {
+            manager.insertBarriersAndKeys(tree, barrierCount, keysCount, neededKeysCount);
+        }
+
+        // Check if the forest is solvable
+        bool solvable = true;
+        for (Tree* tree : generador->forest) {
+            if (!manager.isSolvable(tree)) {
+                solvable = false;
+                break;
+            }
+        }
+
+        if (solvable) {
+            cout << "El bosque es solucionable." << endl;
+        } else {
+            cout << "El bosque no es solucionable." << endl;
+        }
 
         cout << "Desea Reintentar? (y/n): ";
         cin >> answer;
@@ -67,5 +87,6 @@ int main(){
             break;
         }
     }
+
     return 0;
 }

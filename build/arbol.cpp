@@ -11,14 +11,12 @@
 
 using namespace std;
 
-// Adding a reference for colitioned childrens
-static Node* collisionMarker = reinterpret_cast<Node*>(0x1);
-
 // Node class for the tree
 // has a id and an array of 3 children
 class Node{
 public:
     int id;
+    int barrier_id=0;
     tuple<int, int> pos;
     array<Node*, 3> children;
 
@@ -26,6 +24,9 @@ public:
         children.fill(nullptr);
     }
 };
+
+// Adding a reference for colitioned childrens
+static Node* collisionMarker = reinterpret_cast<Node*>(0x1);
 
 class Tree{
 public:
@@ -47,7 +48,7 @@ public:
         usedCoordinates.insert(make_tuple(0, 0)); // La raíz está en (0, 0)
         root = new Node(lastNodeId, *usedCoordinates.begin()); // Nodo raíz con valor 1 y pos (0,0)
         incompleteNodes.insert(root); // La raíz es el primer nodo incompleto
-        srand(seed);
+        srand(seed); // inicializamos la funcion random
     }
 
     ///////////////////////////////////////////
@@ -278,6 +279,37 @@ public:
             recursiveCoefCount(child, coef, totalNodes);
         }
     }
+
+    
+    ///////////////////////////////////////////
+    //////////////// Mutation  ////////////////
+    ///////////////////////////////////////////
+
+    // Mutate the tree by adding or removing a leaf
+    int mutate() {
+        if (rand() % 2 == 0) {
+            // Add a leaf
+            return randomNodeGen();
+        } else {
+            // Remove a leaf
+            return removeLeaf();
+        }
+    }
+
+    // Remove a leaf from the tree
+    int removeLeaf() {
+        if (incompleteNodes.empty()) return 1;
+
+        // Choose a random incomplete node
+        auto it = incompleteNodes.begin();
+        advance(it, rand() % incompleteNodes.size());
+        Node* selectedNode = *it;
+
+        // Remove the node
+        recursiveDeleteNode(selectedNode);
+        return 0;
+    }
+
 
     ///////////////////////////////////////////
     //// Auxiliary visualization functions ////
