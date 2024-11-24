@@ -6,17 +6,19 @@ El programa crea representaciones de una mazmorra 2D mediante arboles, explciado
 Este programa genera árboles aleatorios (con una visualizacion en la carpeta "poblacion" dentro de el repositorio base) con la finalidad de aplicar a futuro mutaciones en conjunto de cruces, y posteriomente (aqui es donde nosotros nos diferenciamos en relacion al paper) seleccionar al mejor individuo de la poblacion para la funcion de evaluacion unicamente enfocado en la cantidad de habitaciones y coeficiente lineal. A continuacion vendra la parte de generar barreras y llaves, con un unico candidato, si no genera de esta manera una solucion entonces intenta con el segundo individuo mas aceptable.
 Ha sido implementado en C++ y está diseñado específicamente para ejecutarse en entornos **UNIX**.
 
-### Falta por implementar:
-+ [ ] Evolucion (avanzado pero no funcional para mostrar)
-+ [ ] Seleccion de la evolucion
-+ [ ] Generacion de barreras y llaves a la solucion con algoritmos A*
-+ [ ] Comprobar solucion
-+ [ ] Generar una visualizacion*
-
-
 ## Dependencias
-Para compilar y ejecutar este programa, es necesario tener instalado el compilador `g++` con soporte para C++11. En sistemas basados en UNIX (como Ubuntu), se puede instalar `g++` con el siguiente comando:
+Se necesita el paquete `Graphviz` para las visualizaciones:
+| Distribución | Comando para instalar `g++` |
+|:------------|:---------------------------|
+| **Ubuntu/Debian** | ```sudo apt-get update && sudo apt-get install graphviz``` |
+| **Arch Linux** | ```sudo pacman -S graphviz``` |
+| **Red Hat/CentOS** | ```sudo yum install graphviz``` |
+| **Fedora** | ```sudo dnf install graphviz``` |
+| **OpenSUSE** | ```sudo zypper install graphviz``` |
+| **MacOS (con Homebrew)** | ```brew install graphviz``` |
+| **FreeBSD** | ```sudo pkg install graphviz``` |
 
+Para compilar y ejecutar este programa, es necesario tener instalado el compilador `g++` con soporte para C++11. En sistemas basados en UNIX (como Ubuntu), se puede instalar `g++` con el siguiente comando:
 
 | Distribución | Comando para instalar `g++` |
 |:------------|:---------------------------|
@@ -51,20 +53,5 @@ git clone https://github.com/benjaminpalma/Proyecto-IA-USM.git; cd Proyecto-IA-U
 
 O si se descargo de manera local (como zip) hay que abrir una terminal en la carpeta descomprimida y ejecutar:
 ```bach
-make; ./ejecutable
-```
-
-Si lo anterior no funciona, puede ser que no se haya creado con los permisos adecuados, o que se necesite compilar nuevamente para la maquina en ese caso bastara agregarle permisos de ejecucion:
-```bach
 make; chmod +x ./ejecutable; ./ejecutable
-```
-### Compilacion manual
-
-Se puede compilar manualmente con el siguiente comando:
-```bach
-g++ build/* -o ejecutable; ./ejecutable
-```
-O
-```bach
-gcc -std=c++11 -xc++ -lstdc++ -shared-libgcc build/* -o ejecutable; ./ejecutable
 ```
