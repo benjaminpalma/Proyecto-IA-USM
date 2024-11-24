@@ -48,10 +48,10 @@ Para mayor facilidad tambien se necesita el packete make, que se puede conseguir
 
 Se puede obtener el ejecutable simplemente corriendo el comando, clonando el repositorio y accediento a este
 ```bach
-git clone https://github.com/benjaminpalma/Proyecto-IA-USM.git; cd Proyecto-IA-USM; make; chmod +x; ./ejecutable
+git clone https://github.com/benjaminpalma/Proyecto-IA-USM.git; cd Proyecto-IA-USM; make; chmod +x; ./ejecutable 2>/dev/null
 ```
 
 O si se descargo de manera local (como zip) hay que abrir una terminal en la carpeta descomprimida y ejecutar:
 ```bach
-make; chmod +x ./ejecutable; ./ejecutable
+make; chmod +x ./ejecutable; ./ejecutable 2>/dev/null
 ```

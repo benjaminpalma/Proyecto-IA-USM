@@ -81,6 +81,7 @@ void loadInstance(const string& line, int instance, int steps, int popSize, unsi
     }
 
     cout << "Ningún árbol es resolvible." << endl;
+    population->createPlots(population->bestTree, "instance" + to_string(instance) + "-UNRESOLVED");
     delete population;
     return;
 }

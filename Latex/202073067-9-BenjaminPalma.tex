@@ -150,17 +150,79 @@ En un inicio las instancias y lo pedido ser\'an la misma, pero si no llegara a e
 
 \subsection*{Soluci\'on orientado a un algoritmo de 2 pasos evolutivo}
 
-Nuestra propuesta actual consiste en representar la mazmorra mediante una estructura de \'arbol como en \cite{Dumont2024}, en la cual cada nodo puede tener un m\'aximo de tres hijos que representan, respectivamente, los lados oeste, sur y este del nodo actual (es decir, habitaciones adyacentes). El nodo padre, en cambio, se sit\'ua siempre al norte del nodo actual, permitiendo as\'i que la orientaci\'on de las habitaciones var\'ie y no todas tengan la misma disposici\'on espacial. Esta organizaci\'on facilita que la mazmorra crezca homog\'eneamente en todas las direcciones, brindando una flexibilidad estructural que hace m\'as sencilla la construcci\'on de mutaciones, tales como la adici\'on o eliminaci\'on de hojas en el \'arbol, lo que implica agregar o quitar habitaciones. Esta flexibilidad afecta directamente el coeficiente lineal de la mazmorra, elemento clave en el dise\~no.
+Nuestra propuesta actual para la generaci\'on de mazmorras se basa en una representaci\'on mediante una estructura de \'arbol, como se describe en \cite{Dumont2024}. En esta representaci\'on, cada nodo del \'arbol corresponde a una habitaci\'on, y puede tener un m\'aximo de tres hijos, que representan las habitaciones adyacentes hacia el oeste, sur y este, respectivamente. El nodo padre, por su parte, se sit\'ua siempre al norte del nodo actual. Este dise\~no permite una orientaci\'on espacial flexible de las habitaciones, evitando configuraciones r\'igidas y uniformes que limiten la variedad de mazmorras generadas. Como resultado, la mazmorra puede crecer homog\'eneamente en todas las direcciones, adapt\'andose mejor a los objetivos establecidos.
 
-El proceso de cruzamiento consiste en seleccionar un sub \'arbol de cada progenitor e intercambiarlo, generando as\'i dos nuevos individuos o hijos. Este mecanismo tiene como objetivo principal producir una diversidad de mazmorras que se aproximen lo m\'as posible tanto a la cantidad deseada de habitaciones como al coeficiente lineal ideal, optimizando la estructura para que cumpla con los par\'ametros establecidos.
+La representaci\'on en forma de \'arbol ofrece una flexibilidad estructural que resulta particularmente \'util para aplicar operadores evolutivos como mutaciones y cruces. Por ejemplo, las mutaciones pueden consistir en la adici\'on o eliminaci\'on de hojas en el \'arbol, lo que equivale a agregar o quitar habitaciones en la mazmorra. Esta capacidad de modificar din\'amicamente la estructura permite ajustar el dise\~no de la mazmorra para que cumpla con requisitos espec\'ificos, como el n\'umero de habitaciones o el coeficiente lineal, que es un elemento clave en la evaluaci\'on de su dise\~no. El coeficiente lineal se calcula como el promedio de hijos de los nodo que no sean hojas.
 
-Una vez que se ha generado un candidato de mazmorra adecuado, se procede a la distribuci\'on aleatoria de barreras y llaves dentro de las habitaciones. Con esta disposici\'on inicial, se recorre la mazmorra desde la ra\'iz del \'arbol, y mediante un algoritmo A* (A star), se intenta localizar las llaves necesarias para abrir cada barrera en el camino. Si se logra desbloquear todas las barreras, la salida de la mazmorra se sit\'ua justo detr\'as de la \'ultima barrera, asegurando que el recorrido sea viable y cumpla con el desaf\'io planteado.
+Se inicializa la poblaci\'on inicial mediante una distribuci\'on normal para generar candidatos r\'apidamente aceptables pero diversos, unicamente enfocado en la cantidad de habitaciones, no se toma en cuenta el coeficiente lineal, ya que con las iteraciones ira convergiendo.
+
+El proceso de cruzamiento entre mazmorras se pensaba realizar seleccionando sub\'arboles de cada progenitor, contando con un par\'ametro que es max\_depth que permite calcular la profundidad de un sub \'arbol contando desde la hoja hacia arriba, para posteriormente realizar un intercambio entre ellos. Este mecanismo genera dos nuevos individuos, o hijos, que combinan caracter\'isticas estructurales de ambos padres. El objetivo principal del cruzamiento es introducir diversidad en la poblaci\'on de mazmorras, promoviendo dise\~nos novedosos que se acerquen a los par\'ametros deseados, como la cantidad de habitaciones y el coeficiente lineal ideal. El gran problema es que por tiempo no se logro terminar la implementaci\'on, por lo que optamos por grandes tazas mutaciones (y variables)
+
+Una vez generado un candidato de mazmorra que cumple con los criterios b\'asicos, se procede a su refinamiento mediante la colocaci\'on aleatoria de barreras y llaves dentro de las habitaciones. Este paso inicial establece la distribuci\'on de elementos interactivos en el entorno. A continuaci\'on, se eval\'ua la viabilidad del dise\~no mediante un recorrido desde la ra\'iz del \'arbol, utilizando un algoritmo Dijkstra para determinar si es posible recolectar las llaves necesarias para abrir cada barrera en el camino. Si el algoritmo confirma que todas las barreras pueden ser desbloqueadas, se establece la salida de la mazmorra justo detr\'as de la \'ultima barrera, garantizando que el dise\~no final sea tanto funcional como desafiante para el jugador.
+
+Esta estrategia no solo asegura que las mazmorras generadas sean solucionables, sino que tambi\'en permite iterar y ajustar el dise\~no para cumplir con par\'ametros espec\'ificos de dificultad, complejidad y distribuci\'on espacial. La combinaci\'on de una representaci\'on en forma de \'arbol con operadores evolutivos y t\'ecnicas de evaluaci\'on basadas en algoritmos de b\'usqueda asegura un equilibrio entre la aleatoriedad inherente al proceso y la capacidad de cumplir con los objetivos de dise\~no establecidos.
+
+\subsection*{Instancias de Arboles Generados}
+parametros extra:
+\begin{itemize}
+    \item steps = 30; pasos evolutivos.
+    \item popSize = 50; Tama\~no de la poblaci\'on.
+    \item stdDev = 2.0; Desviaci\'on est\'andar base aplicada (crece proporcional a la instancia, ya que es proporcional a las habitaciones).
+    \item minMut = 5; m\'inimo de mutaciones.
+    \item maxMut = 15; m\'aximo de mutaciones.
+    \item crossoverProb = 0; Probabilidad de crossover, no se logro implementar correctamente.
+    \item mutationProb = 1; Probabilidad de mutaci\'on, se aumento para remplazar la falta de crossover
+    \item searchTry = 1000; iteraciones por \'arbol para buscar una soluci\'on mediante Dijkstra.
+\end{itemize}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Instancia} & \textbf{Nodos} & \textbf{Coef. Real} & \textbf{Coef. Objetivo} & \textbf{Evaluaci\'on} \\
+\hline
+Instancia 1 & 15 & 2.00 & 2.00 & 0 \\
+Instancia 2 & 20 & 1.19 & 1.00 & 0.1875 \\
+Instancia 3 & 20 & 1.73 & 2.00 & 0.2727 \\
+Instancia 4 & 25 & 1.14 & 1.00 & 0.1429 \\
+Instancia 5 & 30 & 2.00 & 2.00 & 0 \\
+Instancia 6 & 30 & 1.53 & 1.50 & 0.0263 \\
+Instancia 7 & 102 & 1.51 & 1.50 & 0 \\
+Instancia 8 & 500 & 1.50 & 1.50 & 0 \\
+\hline
+\end{tabular}
+\caption{Resultados de la evaluaci\'on de instancias de mazmorras generadas.}
+\end{table}
+
+\subsection*{An\'alisis}
+
+\begin{itemize}
+    \item \textbf{Instancia 1}: 15/15 nodos, coeficiente 2.00, que es el valor ideal. El \'arbol es completamente resolvible, con una evaluaci\'on de 0, lo que indica una perfecta coincidencia con los objetivos.
+    
+    \item \textbf{Instancia 2}: 20/20 nodos, coeficiente 1.19, con una ligera discrepancia respecto al coeficiente objetivo de 1.00. La evaluaci\'on fue 0.1875, indicando una buena aproximaci\'on al objetivo.
+    
+    \item \textbf{Instancia 3}: 20/20 nodos, coeficiente 1.73. Similar a la Instancia 2, con una evaluaci\'on de 0.2727, lo que sugiere que el algoritmo ha logrado generar una mazmorra razonablemente cercana al coeficiente objetivo de 2.00.
+    
+    \item \textbf{Instancia 4}: 25/25 nodos, coeficiente 1.14, con una evaluaci\'on de 0.1429. El coeficiente real est\'a algo lejos del objetivo de 1.00, pero a\'un as\'i, la mazmorra es resolvible.
+    
+    \item \textbf{Instancia 5}: 30/30 nodos, coeficiente 2.00, lo que coincide exactamente con el coeficiente objetivo de 2.00, con una evaluaci\'on de 0, lo que indica una buena resoluci\'on del problema.
+    
+    \item \textbf{Instancia 6}: 30/30 nodos, coeficiente 1.53, con una evaluaci\'on de 0.0263. La evaluaci\'on muestra una ligera desviaci\'on respecto al objetivo, pero la mazmorra sigue siendo resolvible.
+    
+    \item \textbf{Instancia 7}: 100/100 nodos, coeficiente 1.51, con un coeficiente objetivo de 1.50, alcanzando una evaluaci\'on de 0, indicando que la mazmorra es completamente resolvible.
+    
+    \item \textbf{Instancia 8}: 500/- nodos, coeficiente 1.50, con un coeficiente objetivo de 1.50, pero no se logr\'o resolver esta instancia en particular, es decir la segunda fase de barreras y llaves.
+\end{itemize}
+
+De las 8 instancias generadas, 7 fueron resueltas exitosamente, con un desempe\~no cercano o alcanzando los coeficientes objetivo. La instancia 8, sin embargo, no logr\'o ser resuelta debido a la complejidad y al alto n\'umero de nodos requeridos. Esto se debe, en parte, a que la l\'ogica de posicionamiento de barreras y llaves es aleatoria, por lo que, a mayor n\'umero de nodos, mayor entrop\'ia y, por ende, m\'as estados no solucionables.
 
 
 \section{Conclusiones}
 % Conclusiones RELEVANTES del estudio realizado. Deber\'ia responder a las preguntas: ?`todas las t\'ecnicas resuelven el mismo problema o hay algunas diferencias?, ?`En qu\'e se parecen o difieren las t\'ecnicas en el contexto del problema?, ?`qu\'e limitaciones tienen?, ?`qu\'e t\'ecnicas o estrategias son las m\'as prometedoras?, ?`existe trabajo futuro por realizar?, ?`qu\'e ideas usted propone como lineamientos para continuar con investigaciones futuras?
 
-La generaci\'on procedural en videojuegos no solo se limita a crear laberintos o entornos laber\'inticos, sino que permite a los desarrolladores enriquecer los mundos virtuales a trav\'es de sistemas que reaccionan y se adaptan en tiempo real, aumentando la rejugabilidad y proporcionando una experiencia de juego m\'as inmersiva y desafiante, podemos ver como esto esta tomando lugar \cite{7uses}. A lo largo de los a\~nos, el desarrollo de algoritmos avanzados y t\'ecnicas de inteligencia artificial ha permitido perfeccionar la generaci\'on de mazmorras, haciendo que se conviertan en una herramienta cada vez m\'as poderosa y vers\'atil, incluyendo el lenguaje humano dentro de la formulaci\'on de problemas, dejando espacio a su extrapolaci\'on a otras \'areas no solamente los videojuegos.
+La propuesta presentada combina una representaci\'on de mazmorras mediante \'arboles con operadores evolutivos y una evaluaci\'on basada en algoritmos de b\'usqueda, logrando dise\~nos flexibles y funcionales. La estructura arb\'orea facilita la generaci\'on y modificaci\'on de mazmorras, permitiendo ajustes din\'amicos para cumplir con requisitos espec\'ificos, como el n\'umero de habitaciones y el coeficiente lineal, que asegura equilibrio entre jugabilidad y complejidad.
+
+En las pruebas realizadas, 7 de las 8 instancias generadas fueron completamente resolvibles, alcanzando un desempe\~no cercano o coincidente con los coeficientes objetivo. La instancia 8, con un mayor n\'umero de nodos, no fue resoluble debido a la complejidad a\~nadida. Como posibles mejoras, se podr\'ia evaluar la implementaci\'on de una heur\'istica para la colocaci\'on de barreras y llaves, adem\'as de sustituir Dijkstra por el algoritmo A* para resolver las instancias de manera m\'as eficiente. Finalmente, se sugiere optimizar la funci\'on de crossover para permitir una mayor exploraci\'on del espacio de soluciones.
 
 \section{Bibliograf\'ia}
 % Indicando toda la informaci\'on necesaria de acuerdo al tipo de documento revisado. Todas las referencias deben ser citadas en el documento.
