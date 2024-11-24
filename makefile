@@ -1,24 +1,32 @@
 # Nombre del ejecutable
 EXEC = ejecutable
 
+SRC_DIR = build
+
 # Archivos fuente
-SOURCES = build/*
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+
+# Archivos objeto
+OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(SRC_DIR)/%.o, $(SOURCES))
 
 ifeq ($(shell which g++),)
-  CC = gcc
-  CFLAGS = -std=c++11 -xc++ -lstdc++ -shared-libgcc
+	CC = gcc
+	CFLAGS = -std=c++11 -xc++ -lstdc++ -shared-libgcc
 else
-  CC = g++
-  CFLAGS = -std=c++11
+	CC = g++
+	CFLAGS = -std=c++11
 endif
-
-# Reglas de compilación
 
 all: $(EXEC)
 
-$(EXEC): $(SOURCES)
-	$(CC) $(CFLAGS) $(SOURCES) -o $(EXEC)
+# Reglas de compilación
+$(EXEC): $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Regla para compilar archivos .cpp a .o
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Limpia los archivos generados
 clean:
-	rm -f $(EXEC)
+	rm -f $(OBJECTS) $(EXEC)
